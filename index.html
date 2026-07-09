@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="專為客服團隊設計的高質感抽籤與輪值管理工具，支援班表、值日生抽取，具備歷史紀錄儲存、主題管理、名單權重與不重複抽取等完整功能。">
+  <title>客服智慧抽籤與輪值系統 - CS Lottery Tool</title>
+  
+  <!-- Google Fonts: Outfit & Noto Sans TC -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Background Gradients -->
+  <div class="bg-gradient-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-area">
+        <svg class="logo-icon" viewBox="0 0 24 24" width="32" height="32">
+          <rect x="3" y="3" width="18" height="18" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>
+          <circle cx="8" cy="8" r="1.5" fill="currentColor"/>
+          <circle cx="16" cy="8" r="1.5" fill="currentColor"/>
+          <circle cx="8" cy="16" r="1.5" fill="currentColor"/>
+          <circle cx="16" cy="16" r="1.5" fill="currentColor"/>
+          <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+        </svg>
+        <div class="logo-text">
+          <h1>客服智慧抽籤系統</h1>
+          <span>CS Draw & Rotation Hub</span>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <div class="theme-input-wrapper">
+          <label for="current-theme-input">🎯 抽籤主題</label>
+          <input type="text" id="current-theme-input" class="form-input theme-title-input" placeholder="請輸入主題名稱...">
+        </div>
+        
+        <button id="theme-toggle-btn" class="icon-btn" title="切換深淺色模式" aria-label="Toggle Theme">
+          <!-- Sun Icon (Light Mode) -->
+          <svg class="sun-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+          </svg>
+          <!-- Moon Icon (Dark Mode) -->
+          <svg class="moon-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="app-nav">
+      <button class="nav-tab active" data-target="draw-tab" id="tab-draw-btn">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <path d="M9 3v18M15 3v18M3 9h18M3 15h18"/>
+        </svg>
+        <span>🎲 抽籤大廳</span>
+      </button>
+      <button class="nav-tab" data-target="manage-tab" id="tab-manage-btn">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        <span>⚙️ 設定與管理</span>
+      </button>
+      <button class="nav-tab" data-target="history-tab" id="tab-history-btn">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 8v4l3 3"/>
+          <circle cx="12" cy="12" r="9"/>
+        </svg>
+        <span>📜 歷史紀錄</span>
+      </button>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="app-content">
+      
+      <!-- TAB 1: DRAW ARENA -->
+      <section id="draw-tab" class="tab-pane active">
+        <div class="draw-grid">
+          <!-- Left side: Configuration -->
+          <div class="panel settings-card glass">
+            <h2 class="panel-title">抽籤設定</h2>
+
+            <div class="settings-group">
+              <label for="draw-count-input" class="form-label">一次抽取人數</label>
+              <div class="counter-input">
+                <button type="button" id="draw-count-dec" class="counter-btn">-</button>
+                <input type="number" id="draw-count-input" value="1" min="1" max="50">
+                <button type="button" id="draw-count-inc" class="counter-btn">+</button>
+              </div>
+              <span class="input-tip" id="draw-count-max-tip">目前可用候選人：0 人</span>
+            </div>
+
+            <div class="settings-group">
+              <label class="form-label">抽取規則</label>
+              
+              <label class="toggle-control">
+                <input type="checkbox" id="prevent-repeat-toggle" checked>
+                <span class="toggle-slider"></span>
+                <span class="toggle-label">不重複抽籤 (抽出後排除)</span>
+              </label>
+              <p class="control-description">開啟後，抽中的人會被暫時移出抽籤池，直至名單重置或抽完。適合值日生分配。</p>
+
+              <div class="pool-progress-container hide" id="pool-progress-box">
+                <div class="pool-progress-bar">
+                  <div class="pool-progress-fill" id="pool-progress-fill" style="width: 100%;"></div>
+                </div>
+                <div class="pool-progress-text">
+                  抽籤池剩餘：<strong id="pool-remaining-count">0</strong>/<span id="pool-total-count">0</span>
+                  <button id="reset-draw-pool-btn" class="text-link-btn">重置抽籤池</button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="settings-group border-top">
+              <div class="pool-status-panel">
+                <h4>目前抽籤池摘要</h4>
+                <div class="status-indicators">
+                  <div class="indicator-item">
+                    <span class="indicator-label">總候選人</span>
+                    <span class="indicator-value" id="summary-total">0</span>
+                  </div>
+                  <div class="indicator-item">
+                    <span class="indicator-label">已啟用</span>
+                    <span class="indicator-value text-success" id="summary-active">0</span>
+                  </div>
+                  <div class="indicator-item">
+                    <span class="indicator-label">已排除</span>
+                    <span class="indicator-value text-muted" id="summary-excluded">0</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right side: Visualizer -->
+          <div class="panel visualizer-card glass">
+            <div class="visualizer-header">
+              <h2 class="theme-title" id="draw-arena-theme-title">🎰 智慧輪值老虎機</h2>
+            </div>
+            
+            <div class="visual-stage">
+              <!-- Slots Visualizer -->
+              <div id="slots-container" class="stage-element active">
+                <div class="slots-outer-frame">
+                  <div class="slots-window">
+                    <div class="slots-window-shading"></div>
+                    <div class="slots-indicator"></div>
+                    <div class="slots-reel-wrapper" id="slots-reel-wrapper">
+                      <!-- Reels will be generated dynamically based on draw count -->
+                      <div class="slots-reel" id="slots-reel-0">
+                        <div class="reel-strip" id="reel-strip-0">
+                          <div class="reel-item">❓ 準備就緒</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Physical Lever (拉桿) -->
+                  <div class="slot-lever-container" id="slot-lever-trigger">
+                    <div class="lever-base"></div>
+                    <div class="lever-shaft">
+                      <div class="lever-knob"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Big Action Area -->
+            <div class="action-bar">
+              <button id="start-draw-btn" class="btn btn-primary btn-lg">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                <span>開始抽籤</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Latest Results Area -->
+        <div class="panel results-card glass mt-4">
+          <div class="results-header">
+            <h3>🎉 本次抽籤結果</h3>
+            <button id="clear-results-btn" class="btn btn-sm btn-ghost">清除畫面結果</button>
+          </div>
+          <div class="latest-results-list" id="latest-results-list">
+            <div class="no-results-placeholder">尚未進行抽籤，請點擊「開始抽籤」按鈕。</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: MANAGE PANEL -->
+      <section id="manage-tab" class="tab-pane">
+        <div class="manage-grid">
+          <!-- Left Column: Theme Operations -->
+          <div class="panel glass">
+            <h2 class="panel-title">主題管理</h2>
+            
+            <div class="settings-group">
+              <label class="form-label">新增或切換主題</label>
+              <div class="theme-creator-input">
+                <input type="text" id="new-theme-name" class="form-input" placeholder="輸入新主題名稱，如：午班值日生">
+                <button id="create-theme-btn" class="btn btn-success">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                  <span>新增</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="settings-group">
+              <label class="form-label">主題快速管理</label>
+              <div class="theme-list-panel" id="theme-list-panel">
+                <!-- Theme list with edit/delete buttons generated here -->
+              </div>
+            </div>
+
+            <div class="settings-group border-top pt-4">
+              <h3 class="subsection-title">批次匯入候選人</h3>
+              <p class="input-description">請輸入候選人名單，可用逗號、空格或換行分隔：</p>
+              <textarea id="batch-import-textarea" class="form-textarea" rows="6" placeholder="例如：&#10;張小明&#10;李小華&#10;王大同&#10;陳阿花"></textarea>
+              <div class="batch-action-row">
+                <button id="batch-import-append-btn" class="btn btn-secondary btn-sm">追加到名單</button>
+                <button id="batch-import-overwrite-btn" class="btn btn-primary btn-sm">覆蓋現有名單</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Candidates Management -->
+          <div class="panel glass flex-column overflow-hidden">
+            <div class="panel-header-row">
+              <h2 class="panel-title">候選人名單管理</h2>
+              <div class="candidate-quick-actions">
+                <button id="candidate-toggle-all-on" class="btn btn-sm btn-ghost text-success">全員啟用</button>
+                <button id="candidate-toggle-all-off" class="btn btn-sm btn-ghost text-danger">全員停用</button>
+                <button id="candidate-reset-weights" class="btn btn-sm btn-ghost">重置權重</button>
+                <button id="candidate-clear-all" class="btn btn-sm btn-ghost text-danger">清空名單</button>
+              </div>
+            </div>
+
+            <div class="search-and-add-row">
+              <div class="search-input-wrapper">
+                <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <input type="text" id="candidate-search" class="form-input search-input" placeholder="搜尋候選人...">
+              </div>
+              
+              <div class="add-single-candidate">
+                <input type="text" id="new-candidate-name" class="form-input" placeholder="新增單一候選人...">
+                <button id="add-candidate-btn" class="btn btn-primary">新增</button>
+              </div>
+            </div>
+
+            <div class="candidates-table-container">
+              <table class="candidates-table">
+                <thead>
+                  <tr>
+                    <th width="80">狀態</th>
+                    <th>姓名/標的</th>
+                    <th width="150">權重 (0.1 - 10)</th>
+                    <th width="120">目前中籤率</th>
+                    <th width="80">操作</th>
+                  </tr>
+                </thead>
+                <tbody id="candidates-table-body">
+                  <!-- Generated dynamically -->
+                </tbody>
+              </table>
+              <div class="empty-table-placeholder hide" id="empty-candidates-msg">
+                目前沒有候選人，請使用上方輸入框新增，或批次匯入。
+              </div>
+            </div>
+
+            <div class="panel-footer-info">
+              <span>已啟用候選人：<strong id="active-candidates-count">0</strong> 人</span>
+              <span class="separator">|</span>
+              <span>權重加總：<strong id="total-weight-value">0</strong></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: HISTORY LOG -->
+      <section id="history-tab" class="tab-pane">
+        <div class="panel glass">
+          <div class="history-header">
+            <h2 class="panel-title">抽籤歷史紀錄</h2>
+            <div class="history-actions">
+              <div class="filter-controls">
+                <select id="history-filter-theme" class="form-select select-sm">
+                  <option value="all">所有主題</option>
+                  <!-- Theme options populated dynamically -->
+                </select>
+              </div>
+              <button id="history-export-csv" class="btn btn-secondary btn-sm">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                </svg>
+                <span>匯出 CSV</span>
+              </button>
+              <button id="history-clear-all" class="btn btn-danger btn-sm">清空所有紀錄</button>
+            </div>
+          </div>
+
+          <div class="history-list-container">
+            <div class="history-list-header">
+              <div class="col-time">抽籤時間</div>
+              <div class="col-theme">抽籤主題</div>
+              <div class="col-mode">動畫模式</div>
+              <div class="col-results">抽中結果</div>
+              <div class="col-actions">操作</div>
+            </div>
+            
+            <div id="history-list-body" class="history-list-body">
+              <!-- Dynamically generated history logs -->
+            </div>
+            
+            <div class="empty-history-placeholder hide" id="empty-history-msg">
+              目前沒有抽籤歷史紀錄。
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- CELEBRATION MODAL -->
+  <div class="modal-overlay" id="celebration-modal">
+    <div class="modal-card glass text-center">
+      <div class="confetti-canvas-container">
+        <canvas id="confetti-canvas"></canvas>
+      </div>
+      <div class="modal-header">
+        <div class="celebration-icon animate-bounce">🏆</div>
+        <h2 class="celebration-title">恭喜中籤！</h2>
+        <p class="celebration-subtitle" id="celebration-theme-name">主題：值日生抽籤</p>
+      </div>
+      <div class="modal-body">
+        <div class="winners-display-grid" id="winners-display-grid">
+          <!-- Dynamically generated winning cards -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="close-celebration-btn" class="btn btn-primary btn-lg">確認並收起</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST SYSTEM -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Load script files -->
+  <script src="js/drawEngine.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/history.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
