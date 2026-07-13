@@ -107,12 +107,11 @@ class HistoryManager {
     if (records.length === 0) return;
 
     // CSV header columns
-    const headers = ['抽籤時間', '主題名稱', '動畫模式', '抽中結果', '當時啟用候選名單'];
+    const headers = ['抽籤時間', '主題名稱', '抽中結果', '當時啟用候選名單'];
     
     const rows = records.map(r => [
       this.formatDate(r.timestamp),
       `"${r.themeName.replace(/"/g, '""')}"`,
-      r.mode,
       `"${r.winners.join(', ').replace(/"/g, '""')}"`,
       `"${r.candidatesPool.join(', ').replace(/"/g, '""')}"`
     ]);

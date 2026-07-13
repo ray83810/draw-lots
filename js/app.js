@@ -934,10 +934,6 @@ function renderHistory() {
     themeCol.className = 'col-theme';
     themeCol.innerText = r.themeName;
 
-    const modeCol = document.createElement('div');
-    modeCol.className = 'col-mode';
-    modeCol.innerText = r.mode;
-
     const resultCol = document.createElement('div');
     resultCol.className = 'col-results';
     resultCol.innerText = r.winners.join(', ');
@@ -964,7 +960,6 @@ function renderHistory() {
 
     row.appendChild(timeCol);
     row.appendChild(themeCol);
-    row.appendChild(modeCol);
     row.appendChild(resultCol);
     row.appendChild(actionCol);
     container.appendChild(row);
