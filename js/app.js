@@ -1089,7 +1089,8 @@ function onDrawingFinished() {
 
   // Render Celebration Modal Content
   const modalThemeText = document.getElementById('celebration-theme-name');
-  modalThemeText.innerHTML = `主題：<strong>${theme.name}</strong> (${theme.preventRepeat ? '不重複抽取' : '重複抽取'})`;
+  const nowStr = HistoryManager.formatDate(Date.now());
+  modalThemeText.innerHTML = `主題：<strong>${theme.name}</strong> (${theme.preventRepeat ? '不重複抽取' : '重複抽取'})<br><span class="celebration-time-label" style="font-size: 0.9rem; opacity: 0.85; margin-top: 6px; display: inline-block; font-weight: normal;">抽籤時間：${nowStr}</span>`;
   
   const winnersGrid = document.getElementById('winners-display-grid');
   winnersGrid.innerHTML = '';
