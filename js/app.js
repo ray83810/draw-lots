@@ -288,20 +288,29 @@ function bindEvents() {
   });
 
   // START DRAW BUTTON
-  document.getElementById('start-draw-btn').addEventListener('click', () => {
-    executeDraw();
+  document.getElementById('start-draw-btn').addEventListener('click', async () => {
+    if (appState.isDrawing) return;
+    let stream = null;
+    if (appState.autoRecord) {
+      stream = await requestRecordingPermission();
+    }
+    executeDraw(stream);
   });
 
   // Physical Lever (拉桿)
   const lever = document.getElementById('slot-lever-trigger');
   if (lever) {
-    lever.addEventListener('click', () => {
+    lever.addEventListener('click', async () => {
       if (appState.isDrawing) return;
       lever.classList.add('pulled');
       setTimeout(() => {
         lever.classList.remove('pulled');
       }, 800);
-      executeDraw();
+      let stream = null;
+      if (appState.autoRecord) {
+        stream = await requestRecordingPermission();
+      }
+      executeDraw(stream);
     });
   }
 
@@ -964,19 +973,22 @@ function renderHistory() {
 
 /**
  * Handles executing a drawing.
+ * @param {MediaStream|null} preAcquiredStream - Pre-acquired recording stream from user gesture, or null.
  */
-async function executeDraw() {
+function executeDraw(preAcquiredStream) {
   if (appState.isDrawing) return;
 
   const theme = getCurrentTheme();
   if (!theme) {
     showToast('⚠️ 無法抽籤', '未選擇任何主題！', 'warning');
+    if (preAcquiredStream) preAcquiredStream.getTracks().forEach(t => t.stop());
     return;
   }
 
   const activeCandidates = theme.candidates.filter(c => c.active);
   if (activeCandidates.length === 0) {
     showToast('⚠️ 名單為空', '請先在設定頁面中加入並啟用候選人！', 'warning');
+    if (preAcquiredStream) preAcquiredStream.getTracks().forEach(t => t.stop());
     return;
   }
 
@@ -1000,18 +1012,14 @@ async function executeDraw() {
 
   if (drawResult.winners.length === 0) {
     showToast('⚠️ 錯誤', '無法完成抽籤，請檢查候選人狀態。', 'danger');
+    if (preAcquiredStream) preAcquiredStream.getTracks().forEach(t => t.stop());
     return;
   }
 
-  // Auto record process
-  if (appState.autoRecord) {
-    showToast('🎬 啟動錄影', '請在彈窗中允許共享此分頁以進行存證錄影...', 'info');
-    const recordSuccess = await startRecording();
-    if (!recordSuccess) {
-      showToast('⚠️ 未錄影抽籤', '未取得錄影授權，抽籤將直接進行。', 'warning');
-    } else {
-      showToast('📹 錄影已開始', '正在錄影中...', 'success');
-    }
+  // Start MediaRecorder if we have a pre-acquired stream
+  if (preAcquiredStream) {
+    startRecordingFromStream(preAcquiredStream);
+    showToast('📹 錄影已開始', '正在錄影中...', 'success');
   }
 
   // Disable controls during draw animation
@@ -1197,41 +1205,50 @@ function removeToast(toast) {
 }
 
 /**
- * Screen Recording: Starts capturing current browser tab/screen
- * @returns {Promise<boolean>} Resolves to true if successful, false if cancelled or error
+ * Screen Recording: Requests screen capture permission.
+ * MUST be called directly inside a user gesture (click handler) to preserve transient activation.
+ * @returns {Promise<MediaStream|null>} The captured stream, or null if denied/error.
  */
-async function startRecording() {
-  recordedChunks = [];
+async function requestRecordingPermission() {
   try {
-    recordingStream = await navigator.mediaDevices.getDisplayMedia({
+    const stream = await navigator.mediaDevices.getDisplayMedia({
       video: {
         displaySurface: "browser"
       },
-      audio: false
+      audio: false,
+      preferCurrentTab: true
     });
+    return stream;
   } catch (err) {
     console.warn("Screen capture permission denied or error:", err);
     showToast('⚠️ 錄影授權取消', '未授予錄影權限，將不錄影直接抽籤。', 'warning');
-    return false;
+    return null;
   }
+}
+
+/**
+ * Screen Recording: Starts MediaRecorder from an already-acquired stream.
+ * @param {MediaStream} stream - The stream from getDisplayMedia.
+ */
+function startRecordingFromStream(stream) {
+  recordedChunks = [];
+  recordingStream = stream;
 
   try {
-    mediaRecorderInstance = new MediaRecorder(recordingStream, {
+    mediaRecorderInstance = new MediaRecorder(stream, {
       mimeType: 'video/webm;codecs=vp9,opus'
     });
   } catch (err) {
     try {
-      mediaRecorderInstance = new MediaRecorder(recordingStream, {
+      mediaRecorderInstance = new MediaRecorder(stream, {
         mimeType: 'video/webm'
       });
     } catch (fallbackErr) {
       console.error("Failed to create MediaRecorder", fallbackErr);
       showToast('⚠️ 錄影初始化失敗', '瀏覽器不支援錄製格式。', 'danger');
-      if (recordingStream) {
-        recordingStream.getTracks().forEach(track => track.stop());
-        recordingStream = null;
-      }
-      return false;
+      stream.getTracks().forEach(track => track.stop());
+      recordingStream = null;
+      return;
     }
   }
 
@@ -1242,7 +1259,6 @@ async function startRecording() {
   };
 
   mediaRecorderInstance.start();
-  return true;
 }
 
 /**
