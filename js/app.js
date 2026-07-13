@@ -7,7 +7,8 @@ let appState = {
   themes: [],
   currentThemeId: '',
   selectedMode: 'slots', // 'slots', 'wheel', 'cards'
-  isDrawing: false
+  isDrawing: false,
+  autoRecord: false
 };
 
 // UI Components instances
@@ -16,11 +17,17 @@ let slotMachineInstance = null;
 let cardFlipInstance = null;
 let confettiInstance = null;
 
+// Screen Recording Globals
+let mediaRecorderInstance = null;
+let recordedChunks = [];
+let recordingStream = null;
+
 // Constant Storage Keys
 const THEMES_STORAGE_KEY = 'cs_lottery_themes';
 const ACTIVE_THEME_KEY = 'cs_lottery_current_theme_id';
 const MODE_STORAGE_KEY = 'cs_lottery_mode';
 const COLOR_SCHEME_KEY = 'cs_lottery_color_scheme';
+const AUTO_RECORD_KEY = 'cs_lottery_auto_record';
 
 // Default Themes Mock
 const DEFAULT_THEMES = [
@@ -117,6 +124,10 @@ function loadData() {
   } else if (appState.themes.length > 0) {
     appState.currentThemeId = appState.themes[0].id;
   }
+
+  // Auto record setting
+  const storedAutoRecord = localStorage.getItem(AUTO_RECORD_KEY);
+  appState.autoRecord = (storedAutoRecord === 'true');
 
   // Selected animation mode (always slots)
   appState.selectedMode = 'slots';
@@ -253,6 +264,16 @@ function bindEvents() {
       showToast('⚙️ 抽取規則已更新', theme.preventRepeat ? '不重複抽籤模式已開啟' : '重複抽籤模式已開啟', 'info');
     }
   });
+
+  // Auto record toggle
+  const autoRecordToggle = document.getElementById('auto-record-toggle');
+  if (autoRecordToggle) {
+    autoRecordToggle.addEventListener('change', (e) => {
+      appState.autoRecord = e.target.checked;
+      localStorage.setItem(AUTO_RECORD_KEY, appState.autoRecord);
+      showToast('🎬 錄影設定已更新', appState.autoRecord ? '自動錄影功能已啟用' : '自動錄影功能已停用', 'info');
+    });
+  }
 
   // Reset drawing pool button
   document.getElementById('reset-draw-pool-btn').addEventListener('click', () => {
@@ -407,6 +428,8 @@ function bindEvents() {
     const modal = document.getElementById('celebration-modal');
     modal.classList.remove('active');
     confettiInstance.stop();
+    // Stop recording and download if running
+    stopRecordingAndDownload();
   });
 }
 
@@ -518,6 +541,11 @@ function renderDrawTab() {
   }
 
   repeatToggle.checked = theme.preventRepeat;
+
+  const autoRecordToggle = document.getElementById('auto-record-toggle');
+  if (autoRecordToggle) {
+    autoRecordToggle.checked = appState.autoRecord;
+  }
 
   // Active candidates pool calculations
   const activeCandidates = theme.candidates.filter(c => c.active);
@@ -930,7 +958,7 @@ function renderHistory() {
 /**
  * Handles executing a drawing.
  */
-function executeDraw() {
+async function executeDraw() {
   if (appState.isDrawing) return;
 
   const theme = getCurrentTheme();
@@ -966,6 +994,17 @@ function executeDraw() {
   if (drawResult.winners.length === 0) {
     showToast('⚠️ 錯誤', '無法完成抽籤，請檢查候選人狀態。', 'danger');
     return;
+  }
+
+  // Auto record process
+  if (appState.autoRecord) {
+    showToast('🎬 啟動錄影', '請在彈窗中允許共享此分頁以進行存證錄影...', 'info');
+    const recordSuccess = await startRecording();
+    if (!recordSuccess) {
+      showToast('⚠️ 未錄影抽籤', '未取得錄影授權，抽籤將直接進行。', 'warning');
+    } else {
+      showToast('📹 錄影已開始', '正在錄影中...', 'success');
+    }
   }
 
   // Disable controls during draw animation
@@ -1148,4 +1187,93 @@ function removeToast(toast) {
       toast.remove();
     }
   });
+}
+
+/**
+ * Screen Recording: Starts capturing current browser tab/screen
+ * @returns {Promise<boolean>} Resolves to true if successful, false if cancelled or error
+ */
+async function startRecording() {
+  recordedChunks = [];
+  try {
+    recordingStream = await navigator.mediaDevices.getDisplayMedia({
+      video: {
+        displaySurface: "browser"
+      },
+      audio: false
+    });
+  } catch (err) {
+    console.warn("Screen capture permission denied or error:", err);
+    showToast('⚠️ 錄影授權取消', '未授予錄影權限，將不錄影直接抽籤。', 'warning');
+    return false;
+  }
+
+  try {
+    mediaRecorderInstance = new MediaRecorder(recordingStream, {
+      mimeType: 'video/webm;codecs=vp9,opus'
+    });
+  } catch (err) {
+    try {
+      mediaRecorderInstance = new MediaRecorder(recordingStream, {
+        mimeType: 'video/webm'
+      });
+    } catch (fallbackErr) {
+      console.error("Failed to create MediaRecorder", fallbackErr);
+      showToast('⚠️ 錄影初始化失敗', '瀏覽器不支援錄製格式。', 'danger');
+      if (recordingStream) {
+        recordingStream.getTracks().forEach(track => track.stop());
+        recordingStream = null;
+      }
+      return false;
+    }
+  }
+
+  mediaRecorderInstance.ondataavailable = (event) => {
+    if (event.data && event.data.size > 0) {
+      recordedChunks.push(event.data);
+    }
+  };
+
+  mediaRecorderInstance.start();
+  return true;
+}
+
+/**
+ * Screen Recording: Stops capturing and downloads WebM file
+ */
+function stopRecordingAndDownload() {
+  if (!mediaRecorderInstance || mediaRecorderInstance.state === "inactive") return;
+
+  mediaRecorderInstance.onstop = () => {
+    try {
+      const blob = new Blob(recordedChunks, { type: 'video/webm' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      
+      const theme = getCurrentTheme();
+      const themeName = theme ? theme.name.replace(/[^\u4e00-\u9fa5a-zA-Z0-9_-]/g, '') : 'draw';
+      const now = new Date();
+      const pad = (n) => String(n).padStart(2, '0');
+      const timeStr = `${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+      
+      a.download = `cs_draw_${themeName}_${timeStr}.webm`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('💾 影片下載成功', '抽籤存證錄影檔已自動下載！', 'success');
+    } catch (err) {
+      console.error("Failed to download video", err);
+      showToast('⚠️ 影片下載失敗', '無法儲存錄影檔案。', 'danger');
+    } finally {
+      if (recordingStream) {
+        recordingStream.getTracks().forEach(track => track.stop());
+        recordingStream = null;
+      }
+      mediaRecorderInstance = null;
+    }
+  };
+
+  mediaRecorderInstance.stop();
 }
