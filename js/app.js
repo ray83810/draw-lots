@@ -269,6 +269,13 @@ function bindEvents() {
   const autoRecordToggle = document.getElementById('auto-record-toggle');
   if (autoRecordToggle) {
     autoRecordToggle.addEventListener('change', (e) => {
+      if (e.target.checked && (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia)) {
+        showToast('⚠️ 不支援錄影', '目前網頁開啟方式（如 file://）限制了錄影功能。請執行專案目錄下的「run_server.bat」以本地伺服器開啟。', 'danger');
+        e.target.checked = false;
+        appState.autoRecord = false;
+        localStorage.setItem(AUTO_RECORD_KEY, false);
+        return;
+      }
       appState.autoRecord = e.target.checked;
       localStorage.setItem(AUTO_RECORD_KEY, appState.autoRecord);
       showToast('🎬 錄影設定已更新', appState.autoRecord ? '自動錄影功能已啟用' : '自動錄影功能已停用', 'info');
