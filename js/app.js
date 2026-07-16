@@ -1115,7 +1115,7 @@ function onDrawingFinished() {
     name.innerText = winner.name;
     
     const rank = document.createElement('span');
-    rank.innerText = winners.length > 1 ? `第 ${i + 1} 順位` : '恭喜中籤者';
+    rank.innerText = winners.length > 1 ? `第 ${i + 1} 順位` : '中籤成員';
 
     card.appendChild(rank);
     card.appendChild(name);

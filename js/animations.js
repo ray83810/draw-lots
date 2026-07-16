@@ -23,7 +23,7 @@ class ConfettiEffect {
     this.active = true;
     this.particles = [];
     
-    const colors = ['#6366f1', '#10b981', '#ef4444', '#f59e0b', '#ec4899', '#14b8a6', '#a855f7'];
+    const colors = ['#94a3b8', '#cbd5e1', '#e2e8f0', '#38bdf8', '#818cf8', '#a5b4fc'];
     
     // Create particles
     for (let i = 0; i < 120; i++) {
