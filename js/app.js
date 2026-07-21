@@ -157,13 +157,46 @@ function initUIComponents() {
 function bindEvents() {
   // Theme name manual edit in header
   const themeInput = document.getElementById('current-theme-input');
-  themeInput.addEventListener('input', (e) => {
+  const updateThemeBtn = document.getElementById('update-theme-name-btn');
+
+  function applyHeaderThemeUpdate(showNotification = false) {
+    const theme = getCurrentTheme();
+    if (!theme) return;
+
+    let newName = themeInput.value.trim();
+    if (!newName) {
+      newName = '未命名主題';
+      themeInput.value = newName;
+    }
+
+    theme.name = newName;
+    saveThemesToStorage();
+    updateThemeListNamesOnly();
+
+    // Sync slot machine theme display & arena header title
+    const machineThemeName = document.getElementById('machine-theme-name');
+    if (machineThemeName) {
+      machineThemeName.textContent = theme.name;
+      machineThemeName.classList.remove('theme-pulse');
+      // Trigger glow pulse animation
+      void machineThemeName.offsetWidth;
+      machineThemeName.classList.add('theme-pulse');
+    }
+    const arenaTitle = document.getElementById('draw-arena-theme-title');
+    if (arenaTitle) arenaTitle.textContent = `🎰 ${theme.name}`;
+
+    if (showNotification) {
+      showToast('🎯 主題名稱已更新', `成功更新主題為：${theme.name}`, 'success');
+    }
+  }
+
+  // Live update while typing
+  themeInput.addEventListener('input', () => {
     const theme = getCurrentTheme();
     if (theme) {
-      theme.name = e.target.value; // Keep trailing spaces while typing
+      theme.name = themeInput.value;
       saveThemesToStorage();
       updateThemeListNamesOnly();
-      // Sync slot machine theme display in real-time
       const machineThemeName = document.getElementById('machine-theme-name');
       if (machineThemeName) machineThemeName.textContent = theme.name || '未命名主題';
       const arenaTitle = document.getElementById('draw-arena-theme-title');
@@ -171,20 +204,26 @@ function bindEvents() {
     }
   });
 
-  themeInput.addEventListener('blur', (e) => {
-    const theme = getCurrentTheme();
-    if (theme && !e.target.value.trim()) {
-      theme.name = '未命名主題';
-      e.target.value = theme.name;
-      saveThemesToStorage();
-      updateThemeListNamesOnly();
-      // Sync slot machine display
-      const machineThemeName = document.getElementById('machine-theme-name');
-      if (machineThemeName) machineThemeName.textContent = theme.name;
-      const arenaTitle = document.getElementById('draw-arena-theme-title');
-      if (arenaTitle) arenaTitle.textContent = `🎰 ${theme.name}`;
+  // Enter key press in theme input
+  themeInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      applyHeaderThemeUpdate(true);
+      themeInput.blur();
     }
   });
+
+  // Blur event
+  themeInput.addEventListener('blur', () => {
+    applyHeaderThemeUpdate(false);
+  });
+
+  // Click "更新" button
+  if (updateThemeBtn) {
+    updateThemeBtn.addEventListener('click', () => {
+      applyHeaderThemeUpdate(true);
+    });
+  }
 
   // Dark/Light Theme toggle button
   document.getElementById('theme-toggle-btn').addEventListener('click', () => {

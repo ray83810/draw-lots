@@ -217,16 +217,39 @@ body {
   gap: 16px;
 }
 
-.theme-select-wrapper {
+.theme-input-wrapper {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.theme-select-wrapper label {
+.theme-input-wrapper label {
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.theme-input-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.theme-title-input {
+  min-width: 180px;
+  max-width: 240px;
+}
+
+/* Flash animation when theme name is updated */
+.machine-theme-name.theme-pulse {
+  animation: themeFlashPulse 0.8s ease-out;
+}
+
+@keyframes themeFlashPulse {
+  0% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(99, 102, 241, 1)); }
+  50% { transform: scale(1.08); filter: drop-shadow(0 0 35px rgba(129, 140, 248, 1)); }
+  100% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(129, 140, 248, 0.45)); }
 }
 
 /* Form inputs & controls */
