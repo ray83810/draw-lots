@@ -157,7 +157,6 @@ function initUIComponents() {
 function bindEvents() {
   // Theme name manual edit in header
   const themeInput = document.getElementById('current-theme-input');
-  const updateThemeBtn = document.getElementById('update-theme-name-btn');
 
   function applyHeaderThemeUpdate(showNotification = false) {
     const theme = getCurrentTheme();
@@ -217,13 +216,6 @@ function bindEvents() {
   themeInput.addEventListener('blur', () => {
     applyHeaderThemeUpdate(false);
   });
-
-  // Click "更新" button
-  if (updateThemeBtn) {
-    updateThemeBtn.addEventListener('click', () => {
-      applyHeaderThemeUpdate(true);
-    });
-  }
 
   // Dark/Light Theme toggle button
   document.getElementById('theme-toggle-btn').addEventListener('click', () => {
