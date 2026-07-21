@@ -293,8 +293,11 @@ function bindEvents() {
     let stream = null;
     if (appState.autoRecord) {
       stream = await requestRecordingPermission();
+      // Wait 1.5s for recording screen share dialog to settle before animation
+      setTimeout(() => executeDraw(stream), 1500);
+    } else {
+      executeDraw(stream);
     }
-    executeDraw(stream);
   });
 
   // Physical Lever (拉桿)
@@ -303,14 +306,15 @@ function bindEvents() {
     lever.addEventListener('click', async () => {
       if (appState.isDrawing) return;
       lever.classList.add('pulled');
-      setTimeout(() => {
-        lever.classList.remove('pulled');
-      }, 800);
+      setTimeout(() => { lever.classList.remove('pulled'); }, 800);
       let stream = null;
       if (appState.autoRecord) {
         stream = await requestRecordingPermission();
+        // Wait 1.5s for recording screen share dialog to settle before animation
+        setTimeout(() => executeDraw(stream), 1500);
+      } else {
+        executeDraw(stream);
       }
-      executeDraw(stream);
     });
   }
 
@@ -608,6 +612,19 @@ function renderDrawTab() {
   document.getElementById('summary-total').innerText = theme.candidates.length;
   document.getElementById('summary-active').innerText = totalActive;
   document.getElementById('summary-excluded').innerText = theme.candidates.filter(c => !c.active).length + (theme.preventRepeat ? theme.drawnIds.length : 0);
+
+  // Update arena header info
+  const arenaTitle = document.getElementById('draw-arena-theme-title');
+  if (arenaTitle) arenaTitle.textContent = `🎰 ${theme.name}`;
+
+  const arenaPoolStatus = document.getElementById('arena-pool-status');
+  if (arenaPoolStatus) {
+    if (theme.preventRepeat && totalActive > 0) {
+      arenaPoolStatus.textContent = `抽籤池：${totalEligible} / ${totalActive} 人可用`;
+    } else {
+      arenaPoolStatus.textContent = `候選人：${totalActive} 人`;
+    }
+  }
 
   // Initialize/Redraw animation element
   slotMachineInstance.reset();

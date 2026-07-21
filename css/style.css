@@ -686,32 +686,103 @@ html:not(.light) .moon-icon { display: block; }
 /* ==========================================================================
    TAB 1: DRAW ARENA SPECIFIC STYLES
    ========================================================================== */
-.draw-grid {
-  display: grid;
-  grid-template-columns: 340px 1fr;
-  gap: 20px;
-  align-items: start;
-}
 
-@media (max-width: 900px) {
-  .draw-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.visualizer-card {
+/* Full-width arena panel */
+.draw-arena-full {
   display: flex;
   flex-direction: column;
-  min-height: 520px;
-  justify-content: space-between;
+  gap: 20px;
 }
 
-.visualizer-header {
+/* Arena header with title + pool status + reset btn */
+.arena-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--glass-border);
   padding-bottom: 16px;
+}
+
+.arena-title-group {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.arena-pool-status {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.arena-header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* ===== SLOT MACHINE BODY ===== */
+.slot-machine-body {
+  background: linear-gradient(180deg, #1a2236 0%, #0d1525 40%, #121e30 100%);
+  border: 3px solid #2d3a52;
+  border-radius: 24px;
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.7),
+    0 0 0 1px rgba(255,255,255,0.04),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+  overflow: hidden;
+  max-width: 680px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Machine top row with blinking lights + brand name */
+.machine-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border-bottom: 2px solid #2d3a52;
+}
+
+.machine-lights {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.machine-light {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  animation: lightBlink 1.8s ease-in-out infinite alternate;
+}
+
+.machine-light:nth-child(2) { animation-delay: 0.3s; }
+.machine-light:nth-child(3) { animation-delay: 0.6s; }
+.machine-light:nth-child(4) { animation-delay: 0.9s; }
+.machine-light:nth-child(5) { animation-delay: 1.2s; }
+
+.light-red    { background: #ef4444; box-shadow: 0 0 6px #ef4444; }
+.light-yellow { background: #f59e0b; box-shadow: 0 0 6px #f59e0b; }
+.light-green  { background: #10b981; box-shadow: 0 0 6px #10b981; }
+.light-blue   { background: #38bdf8; box-shadow: 0 0 6px #38bdf8; }
+
+@keyframes lightBlink {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.35; }
+  100% { opacity: 1; }
+}
+
+.machine-brand {
+  font-family: 'Outfit', monospace;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.25em;
+  color: #6366f1;
+  text-shadow: 0 0 10px rgba(99,102,241,0.6);
+  text-transform: uppercase;
 }
 
 .theme-title {
@@ -722,39 +793,76 @@ html:not(.light) .moon-icon { display: block; }
   -webkit-text-fill-color: transparent;
 }
 
-.badge {
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--glass-border);
-  color: var(--text-secondary);
-  font-size: 0.78rem;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 30px;
-}
-
+/* Visual stage (slot window area) */
 .visual-stage {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 24px 0;
+  padding: 24px;
+  background: #0a1020;
   position: relative;
-  min-height: 350px;
-  background: radial-gradient(circle at center, rgba(255,255,255,0.01) 0%, rgba(0,0,0,0.15) 100%);
-  border-radius: var(--border-radius-md);
-  border: 1px dashed rgba(255, 255, 255, 0.05);
+  min-height: 220px;
 }
 
 .stage-element {
   display: none;
   width: 100%;
-  height: 100%;
   align-items: center;
   justify-content: center;
 }
 
 .stage-element.active {
   display: flex;
+}
+
+/* Machine bottom section */
+.machine-bottom {
+  background: linear-gradient(135deg, #0f172a 0%, #1a2436 100%);
+  border-top: 2px solid #2d3a52;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.machine-coin-slot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0 0;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  font-weight: 600;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.coin-slot-line {
+  width: 40px;
+  height: 3px;
+  background: #334155;
+  border-radius: 2px;
+  border: 1px solid #475569;
+}
+
+.machine-footer-strip {
+  width: 100%;
+  height: 8px;
+  background: repeating-linear-gradient(
+    90deg,
+    #1e3a5f 0px, #1e3a5f 6px,
+    #0d1525 6px, #0d1525 12px
+  );
+  margin-top: 12px;
+  opacity: 0.6;
+}
+
+/* Results area below machine */
+.results-card-inline {
+  border-top: 1px solid var(--glass-border);
+  padding-top: 20px;
 }
 
 /* 5.2 SLOT MACHINE STYLES */
@@ -764,16 +872,16 @@ html:not(.light) .moon-icon { display: block; }
   justify-content: center;
   position: relative;
   background: linear-gradient(135deg, #1e293b 0%, #0b0f17 100%);
-  border: 10px solid #475569;
+  border: 8px solid #334155;
   border-radius: var(--border-radius-lg);
-  padding: 24px 70px 24px 24px; /* leaves space on right for lever */
+  padding: 20px 80px 20px 20px;
   box-shadow: 
-    0 15px 35px rgba(0,0,0,0.6), 
-    inset 0 4px 10px rgba(255,255,255,0.1),
+    0 10px 30px rgba(0,0,0,0.5), 
+    inset 0 4px 10px rgba(255,255,255,0.08),
     inset 0 -4px 10px rgba(0,0,0,0.4),
-    0 0 20px var(--primary-glow);
-  width: 95%;
-  max-width: 520px;
+    0 0 25px rgba(99,102,241,0.15);
+  width: 100%;
+  max-width: 560px;
 }
 
 .slots-window {
@@ -894,47 +1002,59 @@ html:not(.light) .moon-icon { display: block; }
   top: 50%;
   transform: translateY(-50%);
   width: 32px;
-  height: 150px;
+  height: 160px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
+  cursor: pointer;
 }
 
 .lever-base {
-  width: 28px;
-  height: 36px;
+  width: 32px;
+  height: 40px;
   background: linear-gradient(135deg, #64748b 0%, #334155 100%);
   border: 2px solid #475569;
-  border-radius: 6px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
   z-index: 3;
 }
 
 .lever-shaft {
   position: absolute;
-  bottom: 24px;
+  bottom: 28px;
   width: 8px;
-  height: 90px;
+  height: 100px;
   background: linear-gradient(to right, #f1f5f9, #94a3b8, #cbd5e1);
   border-radius: 4px;
   transform-origin: bottom center;
   transform: rotate(-15deg);
   z-index: 2;
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  transition: filter 0.2s;
+}
+
+.slot-lever-container:hover .lever-shaft {
+  filter: brightness(1.2);
 }
 
 .lever-knob {
   position: absolute;
-  top: -15px;
+  top: -18px;
   left: 50%;
   transform: translateX(-50%);
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   background: radial-gradient(circle at 10px 10px, #ff5959, #b90000 70%, #660000);
   border-radius: 50%;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.4);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.4);
   cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.slot-lever-container:hover .lever-knob {
+  transform: translateX(-50%) scale(1.08);
+  box-shadow: 0 6px 16px rgba(185,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.4);
 }
 
 /* Lever Pull Animation Class */
@@ -950,14 +1070,14 @@ html:not(.light) .moon-icon { display: block; }
 }
 
 
-/* 5.5 Action Bar & Results */
+/* 5.5 Action Bar */
 .action-bar {
   display: flex;
   justify-content: center;
-  padding: 16px 0;
-  border-top: 1px solid var(--glass-border);
+  padding: 16px 0 20px;
 }
 
+/* Results row */
 .results-header {
   display: flex;
   justify-content: space-between;
@@ -971,6 +1091,7 @@ html:not(.light) .moon-icon { display: block; }
   font-size: 1.05rem;
   font-weight: 700;
 }
+
 
 .latest-results-list {
   display: flex;
@@ -1021,6 +1142,31 @@ html:not(.light) .moon-icon { display: block; }
 /* ==========================================================================
    TAB 2: MANAGEMENT PANEL STYLES
    ========================================================================== */
+
+/* Draw settings panel at top of manage tab */
+.manage-draw-settings {
+  margin-bottom: 20px;
+}
+
+.manage-draw-settings-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-top: 16px;
+}
+
+@media (max-width: 1100px) {
+  .manage-draw-settings-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .manage-draw-settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .manage-grid {
   display: grid;
   grid-template-columns: 360px 1fr;

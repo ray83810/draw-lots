@@ -90,10 +90,106 @@
       
       <!-- TAB 1: DRAW ARENA -->
       <section id="draw-tab" class="tab-pane active">
-        <div class="draw-grid">
-          <!-- Left side: Configuration -->
-          <div class="panel settings-card glass">
-            <h2 class="panel-title">抽籤設定</h2>
+        <!-- Full-width Slot Machine Arena -->
+        <div class="panel draw-arena-full glass">
+
+
+          <!-- Slot Machine Arena Header -->
+          <div class="arena-header">
+            <div class="arena-title-group">
+              <h2 class="theme-title" id="draw-arena-theme-title">🎰 智慧輪值老虎機</h2>
+              <span class="arena-pool-status" id="arena-pool-status">候選人：載入中...</span>
+            </div>
+            <div class="arena-header-actions">
+              <button id="reset-draw-pool-btn" class="btn btn-sm btn-ghost">🔄 重置抽籤池</button>
+            </div>
+          </div>
+
+          <!-- Slot Machine Body -->
+          <div class="slot-machine-body">
+            <!-- Machine Top Decorations -->
+            <div class="machine-top">
+              <div class="machine-lights">
+                <span class="machine-light light-red"></span>
+                <span class="machine-light light-yellow"></span>
+                <span class="machine-light light-green"></span>
+                <span class="machine-light light-blue"></span>
+                <span class="machine-light light-red"></span>
+              </div>
+              <div class="machine-brand">CS DRAW SYSTEM</div>
+              <div class="machine-lights">
+                <span class="machine-light light-blue"></span>
+                <span class="machine-light light-green"></span>
+                <span class="machine-light light-yellow"></span>
+                <span class="machine-light light-red"></span>
+                <span class="machine-light light-green"></span>
+              </div>
+            </div>
+
+            <!-- Slot Window + Lever -->
+            <div class="visual-stage">
+              <div id="slots-container" class="stage-element active">
+                <div class="slots-outer-frame">
+                  <div class="slots-window">
+                    <div class="slots-window-shading"></div>
+                    <div class="slots-indicator"></div>
+                    <div class="slots-reel-wrapper" id="slots-reel-wrapper">
+                      <div class="slots-reel" id="slots-reel-0">
+                        <div class="reel-strip" id="reel-strip-0">
+                          <div class="reel-item">❓ 準備就緒</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Physical Lever -->
+                  <div class="slot-lever-container" id="slot-lever-trigger">
+                    <div class="lever-base"></div>
+                    <div class="lever-shaft">
+                      <div class="lever-knob"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Machine Bottom / Action Area -->
+            <div class="machine-bottom">
+              <div class="machine-coin-slot">
+                <div class="coin-slot-line"></div>
+                <span>INSERT COIN</span>
+              </div>
+              <div class="action-bar">
+                <button id="start-draw-btn" class="btn btn-primary btn-lg">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                  </svg>
+                  <span>開始抽籤</span>
+                </button>
+              </div>
+              <div class="machine-footer-strip"></div>
+            </div>
+          </div>
+
+          <!-- Results Area (below machine) -->
+          <div class="results-card-inline">
+            <div class="results-header">
+              <h3>🎯 本次抽籤結果</h3>
+              <button id="clear-results-btn" class="btn btn-sm btn-ghost">清除</button>
+            </div>
+            <div class="latest-results-list" id="latest-results-list">
+              <div class="no-results-placeholder">尚未進行抽籤，請點擊「開始抽籤」或拉動右側拉桿。</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: MANAGE PANEL -->
+      <section id="manage-tab" class="tab-pane">
+
+        <!-- DRAW SETTINGS (moved from Draw Arena) -->
+        <div class="panel glass manage-draw-settings">
+          <h2 class="panel-title">⚙️ 抽籤設定</h2>
+          <div class="manage-draw-settings-grid">
 
             <div class="settings-group">
               <label for="draw-count-input" class="form-label">一次抽取人數</label>
@@ -107,14 +203,12 @@
 
             <div class="settings-group">
               <label class="form-label">抽取規則</label>
-              
               <label class="toggle-control">
                 <input type="checkbox" id="prevent-repeat-toggle" checked>
                 <span class="toggle-slider"></span>
                 <span class="toggle-label">不重複抽籤 (抽出後排除)</span>
               </label>
               <p class="control-description">開啟後，抽中的人會被暫時移出抽籤池，直至名單重置或抽完。適合值日生分配。</p>
-
               <div class="pool-progress-container hide" id="pool-progress-box">
                 <div class="pool-progress-bar">
                   <div class="pool-progress-fill" id="pool-progress-fill" style="width: 100%;"></div>
@@ -125,98 +219,38 @@
                 </div>
               </div>
             </div>
-            
-            <div class="settings-group border-top">
-              <label class="form-label">錄影設定</label>
-              
+
+            <div class="settings-group">
+              <label class="form-label">🎬 錄影設定</label>
               <label class="toggle-control">
                 <input type="checkbox" id="auto-record-toggle">
                 <span class="toggle-slider"></span>
-                <span class="toggle-label">🎬 抽籤過程自動錄影</span>
+                <span class="toggle-label">抽籤過程自動錄影</span>
               </label>
               <p class="control-description">啟用後，點選抽籤會提示共享此分頁以錄製過程，抽籤完成後自動下載 WebM 影片檔存證。</p>
             </div>
-            
-            <div class="settings-group border-top">
-              <div class="pool-status-panel">
-                <h4>目前抽籤池摘要</h4>
-                <div class="status-indicators">
-                  <div class="indicator-item">
-                    <span class="indicator-label">總候選人</span>
-                    <span class="indicator-value" id="summary-total">0</span>
-                  </div>
-                  <div class="indicator-item">
-                    <span class="indicator-label">已啟用</span>
-                    <span class="indicator-value text-success" id="summary-active">0</span>
-                  </div>
-                  <div class="indicator-item">
-                    <span class="indicator-label">已排除</span>
-                    <span class="indicator-value text-muted" id="summary-excluded">0</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <!-- Right side: Visualizer -->
-          <div class="panel visualizer-card glass">
-            <div class="visualizer-header">
-              <h2 class="theme-title" id="draw-arena-theme-title">🎰 智慧輪值老虎機</h2>
-            </div>
-            
-            <div class="visual-stage">
-              <!-- Slots Visualizer -->
-              <div id="slots-container" class="stage-element active">
-                <div class="slots-outer-frame">
-                  <div class="slots-window">
-                    <div class="slots-window-shading"></div>
-                    <div class="slots-indicator"></div>
-                    <div class="slots-reel-wrapper" id="slots-reel-wrapper">
-                      <!-- Reels will be generated dynamically based on draw count -->
-                      <div class="slots-reel" id="slots-reel-0">
-                        <div class="reel-strip" id="reel-strip-0">
-                          <div class="reel-item">❓ 準備就緒</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Physical Lever (拉桿) -->
-                  <div class="slot-lever-container" id="slot-lever-trigger">
-                    <div class="lever-base"></div>
-                    <div class="lever-shaft">
-                      <div class="lever-knob"></div>
-                    </div>
-                  </div>
+            <div class="settings-group">
+              <label class="form-label">抽籤池摘要</label>
+              <div class="status-indicators">
+                <div class="indicator-item">
+                  <span class="indicator-label">總候選人</span>
+                  <span class="indicator-value" id="summary-total">0</span>
+                </div>
+                <div class="indicator-item">
+                  <span class="indicator-label">已啟用</span>
+                  <span class="indicator-value text-success" id="summary-active">0</span>
+                </div>
+                <div class="indicator-item">
+                  <span class="indicator-label">已排除</span>
+                  <span class="indicator-value text-muted" id="summary-excluded">0</span>
                 </div>
               </div>
             </div>
 
-            <!-- Big Action Area -->
-            <div class="action-bar">
-              <button id="start-draw-btn" class="btn btn-primary btn-lg">
-                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-                  <polygon points="5 3 19 12 5 21 5 3"/>
-                </svg>
-                <span>開始抽籤</span>
-              </button>
-            </div>
           </div>
         </div>
 
-        <!-- Latest Results Area -->
-        <div class="panel results-card glass mt-4">
-          <div class="results-header">
-            <h3>🎉 本次抽籤結果</h3>
-            <button id="clear-results-btn" class="btn btn-sm btn-ghost">清除畫面結果</button>
-          </div>
-          <div class="latest-results-list" id="latest-results-list">
-            <div class="no-results-placeholder">尚未進行抽籤，請點擊「開始抽籤」按鈕。</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- TAB 2: MANAGE PANEL -->
-      <section id="manage-tab" class="tab-pane">
         <div class="manage-grid">
           <!-- Left Column: Theme Operations -->
           <div class="panel glass">
