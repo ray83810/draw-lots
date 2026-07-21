@@ -617,6 +617,10 @@ function renderDrawTab() {
   const arenaTitle = document.getElementById('draw-arena-theme-title');
   if (arenaTitle) arenaTitle.textContent = `🎰 ${theme.name}`;
 
+  // Update in-machine theme display (large, centered above reels)
+  const machineThemeName = document.getElementById('machine-theme-name');
+  if (machineThemeName) machineThemeName.textContent = theme.name;
+
   const arenaPoolStatus = document.getElementById('arena-pool-status');
   if (arenaPoolStatus) {
     if (theme.preventRepeat && totalActive > 0) {
