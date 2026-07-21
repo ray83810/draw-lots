@@ -163,6 +163,11 @@ function bindEvents() {
       theme.name = e.target.value; // Keep trailing spaces while typing
       saveThemesToStorage();
       updateThemeListNamesOnly();
+      // Sync slot machine theme display in real-time
+      const machineThemeName = document.getElementById('machine-theme-name');
+      if (machineThemeName) machineThemeName.textContent = theme.name || '未命名主題';
+      const arenaTitle = document.getElementById('draw-arena-theme-title');
+      if (arenaTitle) arenaTitle.textContent = `🎰 ${theme.name || '未命名主題'}`;
     }
   });
 
@@ -173,6 +178,11 @@ function bindEvents() {
       e.target.value = theme.name;
       saveThemesToStorage();
       updateThemeListNamesOnly();
+      // Sync slot machine display
+      const machineThemeName = document.getElementById('machine-theme-name');
+      if (machineThemeName) machineThemeName.textContent = theme.name;
+      const arenaTitle = document.getElementById('draw-arena-theme-title');
+      if (arenaTitle) arenaTitle.textContent = `🎰 ${theme.name}`;
     }
   });
 
