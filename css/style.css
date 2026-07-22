@@ -738,16 +738,16 @@ html:not(.light) .moon-icon { display: block; }
   gap: 10px;
 }
 
-/* ===== SLOT MACHINE BODY — Cartoon Arcade Style ===== */
+/* ===== SLOT MACHINE BODY — Elegant Dark Arcade Style ===== */
 .slot-machine-body {
-  background: linear-gradient(180deg, #c0392b 0%, #a93226 30%, #922b21 60%, #7b241c 100%);
-  border: 5px solid #f1c40f;
+  background: linear-gradient(180deg, #1e2433 0%, #131722 40%, #0b0d14 100%);
+  border: 5px solid #a38c5a;
   border-radius: 32px 32px 24px 24px;
   box-shadow:
-    0 24px 60px rgba(0,0,0,0.55),
-    0 0 0 2px #b7950b,
-    inset 0 2px 0 rgba(255,255,255,0.25),
-    inset 0 -4px 0 rgba(0,0,0,0.2);
+    0 24px 60px rgba(0,0,0,0.7),
+    0 0 0 2px #75633b,
+    inset 0 2px 0 rgba(255,255,255,0.15),
+    inset 0 -4px 0 rgba(0,0,0,0.4);
   overflow: hidden;
   max-width: 520px;
   margin: 0 auto;
@@ -775,8 +775,8 @@ html:not(.light) .moon-icon { display: block; }
   align-items: center;
   justify-content: space-between;
   padding: 14px 20px;
-  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
-  border-bottom: 3px solid #f1c40f;
+  background: linear-gradient(180deg, #131722 0%, #0b0d14 100%);
+  border-bottom: 3px solid #a38c5a;
   position: relative;
   z-index: 2;
 }
@@ -818,8 +818,8 @@ html:not(.light) .moon-icon { display: block; }
   font-size: 0.85rem;
   font-weight: 900;
   letter-spacing: 0.2em;
-  color: #f1c40f;
-  text-shadow: 0 0 12px rgba(241,196,15,0.6), 0 2px 0 #b7950b;
+  color: #a38c5a;
+  text-shadow: 0 0 12px rgba(163,140,90,0.6), 0 2px 0 #75633b;
   text-transform: uppercase;
 }
 
@@ -838,8 +838,8 @@ html:not(.light) .moon-icon { display: block; }
   align-items: center;
   gap: 4px;
   padding: 16px 24px 12px;
-  background: linear-gradient(180deg, #1a1a2e 0%, #0f0f23 100%);
-  border-bottom: 3px solid #f1c40f;
+  background: linear-gradient(180deg, #0b0d14 0%, #06070a 100%);
+  border-bottom: 3px solid #a38c5a;
   position: relative;
   z-index: 2;
 }
@@ -849,7 +849,7 @@ html:not(.light) .moon-icon { display: block; }
   content: '';
   position: absolute;
   inset: 8px 16px;
-  border: 2px solid rgba(241, 196, 15, 0.25);
+  border: 2px solid rgba(163, 140, 90, 0.25);
   border-radius: 12px;
   pointer-events: none;
 }
@@ -866,14 +866,14 @@ html:not(.light) .moon-icon { display: block; }
 .ornament-line {
   flex: 1;
   height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(241,196,15,0.5), transparent);
+  background: linear-gradient(90deg, transparent, rgba(163,140,90,0.5), transparent);
 }
 
 .ornament-diamond {
   font-size: 0.65rem;
-  color: #f1c40f;
+  color: #a38c5a;
   opacity: 0.85;
-  text-shadow: 0 0 8px rgba(241,196,15,0.8);
+  text-shadow: 0 0 8px rgba(163,140,90,0.8);
 }
 
 /* The big theme name — gold arcade text */
@@ -883,8 +883,8 @@ html:not(.light) .moon-icon { display: block; }
   font-weight: 900;
   letter-spacing: 0.06em;
   text-align: center;
-  color: #f1c40f;
-  text-shadow: 0 0 20px rgba(241,196,15,0.5), 0 2px 0 #b7950b;
+  color: #a38c5a;
+  text-shadow: 0 0 20px rgba(163,140,90,0.5), 0 2px 0 #75633b;
   -webkit-background-clip: unset;
   -webkit-text-fill-color: unset;
   background-clip: unset;
@@ -908,7 +908,7 @@ html:not(.light) .moon-icon { display: block; }
   align-items: center;
   justify-content: center;
   padding: 24px 16px;
-  background: linear-gradient(180deg, #b03a2e 0%, #922b21 60%, #7b241c 100%);
+  background: linear-gradient(180deg, #131722 0%, #0b0d14 100%);
   position: relative;
   min-height: 220px;
   z-index: 2;
@@ -927,8 +927,8 @@ html:not(.light) .moon-icon { display: block; }
 
 /* Machine bottom section */
 .machine-bottom {
-  background: linear-gradient(180deg, #922b21 0%, #7b241c 100%);
-  border-top: 3px solid #f1c40f;
+  background: linear-gradient(180deg, #0b0d14 0%, #06070a 100%);
+  border-top: 3px solid #a38c5a;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -942,7 +942,7 @@ html:not(.light) .moon-icon { display: block; }
   align-items: center;
   gap: 10px;
   padding: 12px 0 0;
-  color: #f1c40f;
+  color: #a38c5a;
   font-size: 0.72rem;
   letter-spacing: 0.18em;
   font-weight: 700;
@@ -953,10 +953,10 @@ html:not(.light) .moon-icon { display: block; }
 .coin-slot-line {
   width: 44px;
   height: 4px;
-  background: linear-gradient(135deg, #f1c40f, #d4ac0d);
+  background: linear-gradient(135deg, #a38c5a, #857044);
   border-radius: 2px;
-  border: 1px solid #b7950b;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
+  border: 1px solid #75633b;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.15);
 }
 
 .machine-footer-strip {
@@ -964,11 +964,12 @@ html:not(.light) .moon-icon { display: block; }
   height: 12px;
   background: repeating-linear-gradient(
     90deg,
-    #f1c40f 0px, #f1c40f 10px,
-    #7b241c 10px, #7b241c 20px
+    #a38c5a 0px, #a38c5a 10px,
+    #06070a 10px, #06070a 20px
   );
   margin-top: 14px;
   border-radius: 0 0 19px 19px;
+  opacity: 0.85;
 }
 
 /* Results area below machine */
@@ -983,23 +984,23 @@ html:not(.light) .moon-icon { display: block; }
   align-items: center;
   justify-content: center;
   position: relative;
-  background: linear-gradient(180deg, #1a1a2e 0%, #0f0f23 100%);
-  border: 6px solid #f1c40f;
+  background: linear-gradient(180deg, #161a24 0%, #0a0c11 100%);
+  border: 6px solid #a38c5a;
   border-radius: 20px;
   padding: 18px 80px 18px 18px;
   box-shadow: 
     0 10px 30px rgba(0,0,0,0.65), 
-    inset 0 2px 6px rgba(255,255,255,0.1),
+    inset 0 2px 6px rgba(255,255,255,0.05),
     inset 0 -3px 8px rgba(0,0,0,0.5),
-    0 0 20px rgba(241,196,15,0.2);
+    0 0 20px rgba(163,140,90,0.15);
   width: 100%;
   max-width: 500px;
 }
 
 .slots-window {
   flex: 1;
-  background: #0d111a;
-  border: 4px solid #f39c12;
+  background: #06080d;
+  border: 4px solid #3b4763;
   border-radius: 14px;
   position: relative;
   overflow: hidden;
@@ -1033,16 +1034,16 @@ html:not(.light) .moon-icon { display: block; }
 
 .slots-indicator {
   position: absolute;
-  top: 50%;
   left: 0;
   right: 0;
+  top: 50%;
   height: 4px;
-  background: #f1c40f;
+  background: #a38c5a;
   z-index: 10;
   transform: translateY(-50%);
   pointer-events: none;
   opacity: 0.9;
-  box-shadow: 0 0 10px #f1c40f;
+  box-shadow: 0 0 10px #a38c5a;
 }
 
 .slots-indicator::before, .slots-indicator::after {
@@ -1053,12 +1054,12 @@ html:not(.light) .moon-icon { display: block; }
 }
 
 .slots-indicator::before {
-  border-left-color: #f1c40f;
+  border-left-color: #a38c5a;
   left: 4px;
 }
 
 .slots-indicator::after {
-  border-right-color: #f1c40f;
+  border-right-color: #a38c5a;
   right: 4px;
 }
 
@@ -1071,15 +1072,15 @@ html:not(.light) .moon-icon { display: block; }
   min-height: 174px;
 }
 
-/* Slot Reel — Yellow Cartoon Card Style (like in reference image!) */
+/* Slot Reel — Elegant Dark Mode Reels */
 .slots-reel {
   flex: 1;
   height: 150px;
-  background: linear-gradient(180deg, #f1c40f 0%, #f39c12 50%, #d4ac0d 100%);
+  background: linear-gradient(180deg, #1f2533 0%, #2a3347 50%, #1f2533 100%);
   border-radius: 12px;
-  border: 3px solid #b7950b;
+  border: 2px solid #3b4763;
   box-shadow: 
-    inset 0 3px 6px rgba(255,255,255,0.4),
+    inset 0 3px 6px rgba(0,0,0,0.4),
     inset 0 -3px 6px rgba(0,0,0,0.3),
     0 4px 8px rgba(0,0,0,0.4);
   overflow: hidden;
@@ -1102,10 +1103,10 @@ html:not(.light) .moon-icon { display: block; }
   justify-content: center;
   font-size: 1.5rem;
   font-weight: 900;
-  color: #1a1a2e;
+  color: #e2e8f0;
   text-align: center;
   padding: 10px;
-  text-shadow: 0 1px 2px rgba(255,255,255,0.6);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.8);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1223,40 +1224,40 @@ html:not(.light) .moon-icon { display: block; }
   padding: 16px 0 20px;
 }
 
-/* Arcade Machine Start Button */
+/* Elegant Arcade Machine Start Button */
 #start-draw-btn {
-  background: linear-gradient(180deg, #ffd93d 0%, #f1c40f 50%, #d4ac0d 100%);
-  color: #1a1a2e;
+  background: linear-gradient(180deg, #c7af70 0%, #a38c5a 50%, #75633b 100%);
+  color: #0b0d14;
   font-weight: 900;
   font-size: 1.15rem;
   letter-spacing: 0.05em;
-  border: 3px solid #b7950b;
+  border: 3px solid #4a3d1c;
   border-radius: 50px;
-  padding: 14px 38px;
-  box-shadow: 
-    0 6px 0 #9a7d0a, 
-    0 10px 24px rgba(0,0,0,0.5),
-    inset 0 3px 6px rgba(255,255,255,0.7);
-  transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
-  text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+  padding: 14px 36px;
+  box-shadow:
+    0 6px 0 #4a3d1c,
+    0 10px 20px rgba(0,0,0,0.5),
+    inset 0 2px 4px rgba(255,255,255,0.4);
   cursor: pointer;
+  transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.3);
 }
 
 #start-draw-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 
-    0 8px 0 #9a7d0a, 
-    0 14px 28px rgba(241,196,15,0.45),
-    inset 0 3px 6px rgba(255,255,255,0.8);
-  filter: brightness(1.06);
+  box-shadow:
+    0 8px 0 #4a3d1c,
+    0 14px 25px rgba(163,140,90,0.4),
+    inset 0 2px 4px rgba(255,255,255,0.5);
+  filter: brightness(1.08);
 }
 
 #start-draw-btn:active {
   transform: translateY(4px);
-  box-shadow: 
-    0 2px 0 #9a7d0a, 
+  box-shadow:
+    0 2px 0 #4a3d1c,
     0 4px 10px rgba(0,0,0,0.4),
-    inset 0 3px 6px rgba(255,255,255,0.6);
+    inset 0 2px 4px rgba(255,255,255,0.4);
 }
 
 /* Results row */

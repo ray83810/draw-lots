@@ -328,7 +328,7 @@ function bindEvents() {
     resetCurrentThemeDrawPool(true);
   });
 
-  async function triggerDrawAction() {
+  async function triggerDrawAction(fromLever = false) {
     if (appState.isDrawing) return;
 
     if (appState.autoRecord) {
@@ -336,32 +336,44 @@ function bindEvents() {
       if (stream) {
         // Start recording IMMEDIATELY upon clicking "允許"
         startRecordingFromStream(stream);
-        showToast('📹 錄影已開啟', '已開始錄製畫面，1.5 秒後啟動抽籤...', 'success');
+        showToast('📹 錄影已開啟', '已開始錄製畫面，即將啟動抽籤...', 'success');
+        
+        // Wait briefly to ensure recording is stable before visual changes
         setTimeout(() => {
-          executeDraw();
-        }, 1500);
+          if (fromLever) playLeverAnimation();
+          // Wait for lever animation to almost finish before slots roll
+          setTimeout(() => executeDraw(), fromLever ? 600 : 0);
+        }, 800);
       } else {
         // User cancelled recording permission, proceed directly
-        executeDraw();
+        if (fromLever) playLeverAnimation();
+        setTimeout(() => executeDraw(), fromLever ? 600 : 0);
       }
     } else {
-      executeDraw();
+      if (fromLever) playLeverAnimation();
+      setTimeout(() => executeDraw(), fromLever ? 600 : 0);
+    }
+  }
+
+  function playLeverAnimation() {
+    const lever = document.getElementById('slot-lever-trigger');
+    if (lever) {
+      lever.classList.add('pulled');
+      setTimeout(() => { lever.classList.remove('pulled'); }, 800);
     }
   }
 
   // START DRAW BUTTON
   document.getElementById('start-draw-btn').addEventListener('click', () => {
-    triggerDrawAction();
+    // Treat the button click the same as a lever pull for visual consistency
+    triggerDrawAction(true);
   });
 
   // Physical Lever (拉桿)
   const lever = document.getElementById('slot-lever-trigger');
   if (lever) {
     lever.addEventListener('click', () => {
-      if (appState.isDrawing) return;
-      lever.classList.add('pulled');
-      setTimeout(() => { lever.classList.remove('pulled'); }, 800);
-      triggerDrawAction();
+      triggerDrawAction(true);
     });
   }
 

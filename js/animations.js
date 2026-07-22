@@ -174,8 +174,11 @@ class SlotMachine {
         strip.style.transform = `translateY(-${scrollAmount}px)`;
       });
 
-      // Bind animation end
-      strip.addEventListener('transitionend', () => {
+      // Bind animation end with a fallback timeout in case transitionend fails
+      let finished = false;
+      const onFinish = () => {
+        if (finished) return;
+        finished = true;
         this.reelsFinished++;
         if (this.reelsFinished === this.reelsCount) {
           this.isSpinning = false;
@@ -183,7 +186,12 @@ class SlotMachine {
             this.onComplete();
           }
         }
-      });
+      };
+
+      strip.addEventListener('transitionend', onFinish);
+      
+      // Fallback: duration in ms + 200ms buffer
+      setTimeout(onFinish, scrollDuration * 1000 + 200);
     });
   }
 
