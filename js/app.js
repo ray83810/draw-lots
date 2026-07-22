@@ -323,9 +323,11 @@ function bindEvents() {
     });
   }
 
-  // Reset drawing pool button
-  document.getElementById('reset-draw-pool-btn').addEventListener('click', () => {
-    resetCurrentThemeDrawPool(true);
+  // Reset drawing pool buttons (bind to all instances)
+  document.querySelectorAll('.reset-draw-pool-btn, #reset-draw-pool-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      resetCurrentThemeDrawPool(true);
+    });
   });
 
   async function triggerDrawAction(fromLever = false) {
@@ -1126,7 +1128,9 @@ function toggleDrawControls(enable) {
   document.getElementById('draw-count-dec').disabled = !enable;
   document.getElementById('draw-count-inc').disabled = !enable;
   document.getElementById('prevent-repeat-toggle').disabled = !enable;
-  document.getElementById('reset-draw-pool-btn').disabled = !enable;
+  document.querySelectorAll('.reset-draw-pool-btn, #reset-draw-pool-btn').forEach(btn => {
+    btn.disabled = !enable;
+  });
 }
 
 /**
