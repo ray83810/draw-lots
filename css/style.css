@@ -316,6 +316,7 @@ html:not(.light) .moon-icon { display: block; }
   border-radius: var(--border-radius-md);
   padding: 6px;
   box-shadow: var(--shadow-sm);
+  margin-top: 24px;
 }
 
 .nav-tab {

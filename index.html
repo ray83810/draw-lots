@@ -60,31 +60,6 @@
       </div>
     </header>
 
-    <!-- Navigation Tabs -->
-    <nav class="app-nav">
-      <button class="nav-tab active" data-target="draw-tab" id="tab-draw-btn">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="18" height="18" rx="2"/>
-          <path d="M9 3v18M15 3v18M3 9h18M3 15h18"/>
-        </svg>
-        <span>🎲 抽籤大廳</span>
-      </button>
-      <button class="nav-tab" data-target="manage-tab" id="tab-manage-btn">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="3"/>
-          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-        </svg>
-        <span>⚙️ 設定與管理</span>
-      </button>
-      <button class="nav-tab" data-target="history-tab" id="tab-history-btn">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 8v4l3 3"/>
-          <circle cx="12" cy="12" r="9"/>
-        </svg>
-        <span>📜 歷史紀錄</span>
-      </button>
-    </nav>
-
     <!-- Main Content Area -->
     <main class="app-content">
       
@@ -92,7 +67,6 @@
       <section id="draw-tab" class="tab-pane active">
         <!-- Full-width Slot Machine Arena -->
         <div class="panel draw-arena-full glass">
-
 
           <!-- Slot Machine Arena Header -->
           <div class="arena-header">
@@ -195,76 +169,78 @@
               <div class="no-results-placeholder">尚未進行抽籤，請點擊「開始抽籤」或拉動右側拉桿。</div>
             </div>
           </div>
+
+          <!-- DRAW SETTINGS (positioned below Draw Results) -->
+          <div class="manage-draw-settings border-top pt-4">
+            <h2 class="panel-title">⚙️ 抽籤設定</h2>
+            <div class="manage-draw-settings-grid">
+
+              <div class="settings-group">
+                <label for="draw-count-input" class="form-label">一次抽取人數</label>
+                <div class="counter-input">
+                  <button type="button" id="draw-count-dec" class="counter-btn">-</button>
+                  <input type="number" id="draw-count-input" value="1" min="1" max="50">
+                  <button type="button" id="draw-count-inc" class="counter-btn">+</button>
+                </div>
+                <span class="input-tip" id="draw-count-max-tip">目前可用候選人：0 人</span>
+              </div>
+
+              <div class="settings-group">
+                <label class="form-label">抽取規則</label>
+                <label class="toggle-control">
+                  <input type="checkbox" id="prevent-repeat-toggle" checked>
+                  <span class="toggle-slider"></span>
+                  <span class="toggle-label">不重複抽籤 (抽出後排除)</span>
+                </label>
+                <p class="control-description">開啟後，抽中的人會被暫時移出抽籤池，直至名單重置或抽完。適合值日生分配。</p>
+                <div class="pool-progress-container hide" id="pool-progress-box">
+                  <div class="pool-progress-bar">
+                    <div class="pool-progress-fill" id="pool-progress-fill" style="width: 100%;"></div>
+                  </div>
+                  <div class="pool-progress-text">
+                    抽籤池剩餘：<strong id="pool-remaining-count">0</strong>/<span id="pool-total-count">0</span>
+                    <button id="reset-draw-pool-btn" class="text-link-btn">重置抽籤池</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="settings-group">
+                <label class="form-label">🎬 錄影設定</label>
+                <label class="toggle-control">
+                  <input type="checkbox" id="auto-record-toggle">
+                  <span class="toggle-slider"></span>
+                  <span class="toggle-label">抽籤過程自動錄影</span>
+                </label>
+                <p class="control-description">啟用後，點選抽籤會提示共享此分頁以錄製過程，抽籤完成後自動下載 WebM 影片檔存證。</p>
+              </div>
+
+              <div class="settings-group">
+                <label class="form-label">抽籤池摘要</label>
+                <div class="status-indicators">
+                  <div class="indicator-item">
+                    <span class="indicator-label">總候選人</span>
+                    <span class="indicator-value" id="summary-total">0</span>
+                  </div>
+                  <div class="indicator-item">
+                    <span class="indicator-label">已啟用</span>
+                    <span class="indicator-value text-success" id="summary-active">0</span>
+                  </div>
+                  <div class="indicator-item">
+                    <span class="indicator-label">已排除</span>
+                    <span class="indicator-value text-muted" id="summary-excluded">0</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
         </div>
       </section>
 
       <!-- TAB 2: MANAGE PANEL -->
       <section id="manage-tab" class="tab-pane">
 
-        <!-- DRAW SETTINGS (moved from Draw Arena) -->
-        <div class="panel glass manage-draw-settings">
-          <h2 class="panel-title">⚙️ 抽籤設定</h2>
-          <div class="manage-draw-settings-grid">
-
-            <div class="settings-group">
-              <label for="draw-count-input" class="form-label">一次抽取人數</label>
-              <div class="counter-input">
-                <button type="button" id="draw-count-dec" class="counter-btn">-</button>
-                <input type="number" id="draw-count-input" value="1" min="1" max="50">
-                <button type="button" id="draw-count-inc" class="counter-btn">+</button>
-              </div>
-              <span class="input-tip" id="draw-count-max-tip">目前可用候選人：0 人</span>
-            </div>
-
-            <div class="settings-group">
-              <label class="form-label">抽取規則</label>
-              <label class="toggle-control">
-                <input type="checkbox" id="prevent-repeat-toggle" checked>
-                <span class="toggle-slider"></span>
-                <span class="toggle-label">不重複抽籤 (抽出後排除)</span>
-              </label>
-              <p class="control-description">開啟後，抽中的人會被暫時移出抽籤池，直至名單重置或抽完。適合值日生分配。</p>
-              <div class="pool-progress-container hide" id="pool-progress-box">
-                <div class="pool-progress-bar">
-                  <div class="pool-progress-fill" id="pool-progress-fill" style="width: 100%;"></div>
-                </div>
-                <div class="pool-progress-text">
-                  抽籤池剩餘：<strong id="pool-remaining-count">0</strong>/<span id="pool-total-count">0</span>
-                  <button id="reset-draw-pool-btn" class="text-link-btn">重置抽籤池</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="settings-group">
-              <label class="form-label">🎬 錄影設定</label>
-              <label class="toggle-control">
-                <input type="checkbox" id="auto-record-toggle">
-                <span class="toggle-slider"></span>
-                <span class="toggle-label">抽籤過程自動錄影</span>
-              </label>
-              <p class="control-description">啟用後，點選抽籤會提示共享此分頁以錄製過程，抽籤完成後自動下載 WebM 影片檔存證。</p>
-            </div>
-
-            <div class="settings-group">
-              <label class="form-label">抽籤池摘要</label>
-              <div class="status-indicators">
-                <div class="indicator-item">
-                  <span class="indicator-label">總候選人</span>
-                  <span class="indicator-value" id="summary-total">0</span>
-                </div>
-                <div class="indicator-item">
-                  <span class="indicator-label">已啟用</span>
-                  <span class="indicator-value text-success" id="summary-active">0</span>
-                </div>
-                <div class="indicator-item">
-                  <span class="indicator-label">已排除</span>
-                  <span class="indicator-value text-muted" id="summary-excluded">0</span>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
 
         <div class="manage-grid">
           <!-- Left Column: Theme Operations -->
@@ -401,6 +377,31 @@
       </section>
 
     </main>
+
+    <!-- Navigation Tabs (placed below content / draw results) -->
+    <nav class="app-nav mt-3">
+      <button class="nav-tab active" data-target="draw-tab" id="tab-draw-btn">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <path d="M9 3v18M15 3v18M3 9h18M3 15h18"/>
+        </svg>
+        <span>🎲 抽籤大廳</span>
+      </button>
+      <button class="nav-tab" data-target="manage-tab" id="tab-manage-btn">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        <span>⚙️ 設定與管理</span>
+      </button>
+      <button class="nav-tab" data-target="history-tab" id="tab-history-btn">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 8v4l3 3"/>
+          <circle cx="12" cy="12" r="9"/>
+        </svg>
+        <span>📜 歷史紀錄</span>
+      </button>
+    </nav>
   </div>
 
   <!-- CELEBRATION MODAL -->
