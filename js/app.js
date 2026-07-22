@@ -328,36 +328,43 @@ function bindEvents() {
     resetCurrentThemeDrawPool(true);
   });
 
-  // START DRAW BUTTON
-  document.getElementById('start-draw-btn').addEventListener('click', async () => {
+  async function triggerDrawAction() {
     if (appState.isDrawing) return;
-    let stream = null;
+
     if (appState.autoRecord) {
-      stream = await requestRecordingPermission();
-      // Wait 1.5s for recording screen share dialog to settle before animation
-      setTimeout(() => executeDraw(stream), 1500);
+      const stream = await requestRecordingPermission();
+      if (stream) {
+        // Start recording IMMEDIATELY upon clicking "允許"
+        startRecordingFromStream(stream);
+        showToast('📹 錄影已開啟', '已開始錄製畫面，1.5 秒後啟動抽籤...', 'success');
+        setTimeout(() => {
+          executeDraw();
+        }, 1500);
+      } else {
+        // User cancelled recording permission, proceed directly
+        executeDraw();
+      }
     } else {
-      executeDraw(stream);
+      executeDraw();
     }
+  }
+
+  // START DRAW BUTTON
+  document.getElementById('start-draw-btn').addEventListener('click', () => {
+    triggerDrawAction();
   });
 
   // Physical Lever (拉桿)
   const lever = document.getElementById('slot-lever-trigger');
   if (lever) {
-    lever.addEventListener('click', async () => {
+    lever.addEventListener('click', () => {
       if (appState.isDrawing) return;
       lever.classList.add('pulled');
       setTimeout(() => { lever.classList.remove('pulled'); }, 800);
-      let stream = null;
-      if (appState.autoRecord) {
-        stream = await requestRecordingPermission();
-        // Wait 1.5s for recording screen share dialog to settle before animation
-        setTimeout(() => executeDraw(stream), 1500);
-      } else {
-        executeDraw(stream);
-      }
+      triggerDrawAction();
     });
   }
+
 
   // Clear latest results button
   document.getElementById('clear-results-btn').addEventListener('click', () => {
@@ -1073,10 +1080,9 @@ function executeDraw(preAcquiredStream) {
     return;
   }
 
-  // Start MediaRecorder if we have a pre-acquired stream
-  if (preAcquiredStream) {
+  // Start MediaRecorder if preAcquiredStream is passed and not already recording
+  if (preAcquiredStream && (!mediaRecorderInstance || mediaRecorderInstance.state === "inactive")) {
     startRecordingFromStream(preAcquiredStream);
-    showToast('📹 錄影已開始', '正在錄影中...', 'success');
   }
 
   // Disable controls during draw animation
