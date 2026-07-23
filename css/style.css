@@ -738,18 +738,20 @@ html:not(.light) .moon-icon { display: block; }
   gap: 10px;
 }
 
-/* Layout Wrapper for Slot Machine + Candidates Roster Sidebar */
+/* Layout Wrapper for Slot Machine + Candidates Roster Sidebar (Centered Group) */
 .slot-machine-layout-wrapper {
   display: flex;
-  gap: 20px;
+  justify-content: center;
   align-items: stretch;
+  gap: 24px;
   width: 100%;
   margin: 0 auto;
 }
 
 .slot-machine-layout-wrapper .slot-machine-body {
-  flex: 1 1 60%;
-  max-width: 540px;
+  flex: 0 0 520px;
+  width: 520px;
+  max-width: 520px;
   margin: 0;
 }
 
