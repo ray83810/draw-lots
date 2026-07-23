@@ -79,83 +79,106 @@
             </div>
           </div>
 
-          <!-- Slot Machine Body -->
-          <div class="slot-machine-body">
-            <!-- Machine Top Decorations -->
-            <div class="machine-top">
-              <div class="machine-lights">
-                <span class="machine-light light-red"></span>
-                <span class="machine-light light-yellow"></span>
-                <span class="machine-light light-green"></span>
-                <span class="machine-light light-blue"></span>
-                <span class="machine-light light-red"></span>
+          <!-- Slot Machine Arena Content (Slot Machine Left, Candidates List Right) -->
+          <div class="slot-machine-layout-wrapper">
+            <!-- Slot Machine Body -->
+            <div class="slot-machine-body">
+              <!-- Machine Top Decorations -->
+              <div class="machine-top">
+                <div class="machine-lights">
+                  <span class="machine-light light-red"></span>
+                  <span class="machine-light light-yellow"></span>
+                  <span class="machine-light light-green"></span>
+                  <span class="machine-light light-blue"></span>
+                  <span class="machine-light light-red"></span>
+                </div>
+                <div class="machine-brand">CS DRAW SYSTEM</div>
+                <div class="machine-lights">
+                  <span class="machine-light light-blue"></span>
+                  <span class="machine-light light-green"></span>
+                  <span class="machine-light light-yellow"></span>
+                  <span class="machine-light light-red"></span>
+                  <span class="machine-light light-green"></span>
+                </div>
               </div>
-              <div class="machine-brand">CS DRAW SYSTEM</div>
-              <div class="machine-lights">
-                <span class="machine-light light-blue"></span>
-                <span class="machine-light light-green"></span>
-                <span class="machine-light light-yellow"></span>
-                <span class="machine-light light-red"></span>
-                <span class="machine-light light-green"></span>
-              </div>
-            </div>
 
-            <!-- Theme Name Display (centered, above reels) -->
-            <div class="machine-theme-display">
-              <div class="machine-theme-ornament">
-                <span class="ornament-line"></span>
-                <span class="ornament-diamond">◆</span>
-                <span class="ornament-line"></span>
+              <!-- Theme Name Display (centered, above reels) -->
+              <div class="machine-theme-display">
+                <div class="machine-theme-ornament">
+                  <span class="ornament-line"></span>
+                  <span class="ornament-diamond">◆</span>
+                  <span class="ornament-line"></span>
+                </div>
+                <div class="machine-theme-name" id="machine-theme-name">載入主題中...</div>
+                <div class="machine-theme-ornament">
+                  <span class="ornament-line"></span>
+                  <span class="ornament-diamond">◆</span>
+                  <span class="ornament-line"></span>
+                </div>
               </div>
-              <div class="machine-theme-name" id="machine-theme-name">載入主題中...</div>
-              <div class="machine-theme-ornament">
-                <span class="ornament-line"></span>
-                <span class="ornament-diamond">◆</span>
-                <span class="ornament-line"></span>
-              </div>
-            </div>
 
-            <!-- Slot Window + Lever -->
-            <div class="visual-stage">
-              <div id="slots-container" class="stage-element active">
-                <div class="slots-outer-frame">
-                  <div class="slots-window">
-                    <div class="slots-window-shading"></div>
-                    <div class="slots-indicator"></div>
-                    <div class="slots-reel-wrapper" id="slots-reel-wrapper">
-                      <div class="slots-reel" id="slots-reel-0">
-                        <div class="reel-strip" id="reel-strip-0">
-                          <div class="reel-item">❓ 準備就緒</div>
+              <!-- Slot Window + Lever -->
+              <div class="visual-stage">
+                <div id="slots-container" class="stage-element active">
+                  <div class="slots-outer-frame">
+                    <div class="slots-window">
+                      <div class="slots-window-shading"></div>
+                      <div class="slots-indicator"></div>
+                      <div class="slots-reel-wrapper" id="slots-reel-wrapper">
+                        <div class="slots-reel" id="slots-reel-0">
+                          <div class="reel-strip" id="reel-strip-0">
+                            <div class="reel-item">❓ 準備就緒</div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <!-- Physical Lever -->
-                  <div class="slot-lever-container" id="slot-lever-trigger">
-                    <div class="lever-base"></div>
-                    <div class="lever-shaft">
-                      <div class="lever-knob"></div>
+                    <!-- Physical Lever -->
+                    <div class="slot-lever-container" id="slot-lever-trigger">
+                      <div class="lever-base"></div>
+                      <div class="lever-shaft">
+                        <div class="lever-knob"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+
+              <!-- Machine Bottom / Action Area -->
+              <div class="machine-bottom">
+                <div class="machine-coin-slot">
+                  <div class="coin-slot-line"></div>
+                  <span>INSERT COIN</span>
+                </div>
+                <div class="action-bar">
+                  <button id="start-draw-btn" class="btn btn-primary btn-lg">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="5 3 19 12 5 21 5 3"/>
+                    </svg>
+                    <span>開始抽籤</span>
+                  </button>
+                </div>
+                <div class="machine-footer-strip"></div>
+              </div>
             </div>
 
-            <!-- Machine Bottom / Action Area -->
-            <div class="machine-bottom">
-              <div class="machine-coin-slot">
-                <div class="coin-slot-line"></div>
-                <span>INSERT COIN</span>
+            <!-- Candidates Live Roster Sidebar Panel (Recorded in Screen Recording) -->
+            <div class="candidates-sidebar-panel">
+              <div class="candidates-sidebar-header">
+                <div class="sidebar-title-group">
+                  <h3 class="sidebar-title">👥 參與人員名單</h3>
+                  <span id="candidates-sidebar-count-badge" class="count-badge">0 人</span>
+                </div>
+                <span id="candidates-sidebar-rule-tip" class="rule-tip-badge">即時名冊</span>
               </div>
-              <div class="action-bar">
-                <button id="start-draw-btn" class="btn btn-primary btn-lg">
-                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-                    <polygon points="5 3 19 12 5 21 5 3"/>
-                  </svg>
-                  <span>開始抽籤</span>
-                </button>
+
+              <div class="candidates-sidebar-search">
+                <input type="text" id="candidates-sidebar-search-input" placeholder="🔍 搜尋成員名稱..." class="form-input sidebar-search-input">
               </div>
-              <div class="machine-footer-strip"></div>
+
+              <div class="candidates-sidebar-body" id="candidates-sidebar-list">
+                <!-- Dynamically populated candidate chips -->
+                <div class="sidebar-empty-tip">暫無參與人員</div>
+              </div>
             </div>
           </div>
 

@@ -233,6 +233,14 @@ function bindEvents() {
     }
   });
 
+  // Sidebar search input for live candidates roster
+  const sidebarSearchInput = document.getElementById('candidates-sidebar-search-input');
+  if (sidebarSearchInput) {
+    sidebarSearchInput.addEventListener('input', () => {
+      renderCandidatesSidebar();
+    });
+  }
+
   // Navigation tab switching
   const tabs = document.querySelectorAll('.nav-tab');
   tabs.forEach(tab => {
@@ -694,6 +702,77 @@ function renderDrawTab() {
 
   // Initialize/Redraw animation element
   slotMachineInstance.reset();
+
+  // Render Candidate Roster Sidebar next to slot machine
+  renderCandidatesSidebar();
+}
+
+/**
+ * Renders the Candidate Live Roster Sidebar Panel next to the slot machine.
+ */
+function renderCandidatesSidebar() {
+  const sidebarList = document.getElementById('candidates-sidebar-list');
+  const countBadge = document.getElementById('candidates-sidebar-count-badge');
+  const ruleTip = document.getElementById('candidates-sidebar-rule-tip');
+  const searchInput = document.getElementById('candidates-sidebar-search-input');
+  
+  if (!sidebarList) return;
+
+  const theme = getCurrentTheme();
+  if (!theme || !theme.candidates) {
+    sidebarList.innerHTML = '<div class="sidebar-empty-tip">無抽籤主題或人員</div>';
+    if (countBadge) countBadge.textContent = '0 人';
+    return;
+  }
+
+  const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+  const activeCandidates = theme.candidates.filter(c => c.active);
+  
+  if (countBadge) {
+    countBadge.textContent = `${activeCandidates.length} 人`;
+  }
+  
+  if (ruleTip) {
+    ruleTip.textContent = theme.preventRepeat ? '不重複抽籤' : '可重複抽籤';
+  }
+
+  const filtered = activeCandidates.filter(c => {
+    return !query || c.name.toLowerCase().includes(query);
+  });
+
+  if (filtered.length === 0) {
+    sidebarList.innerHTML = '<div class="sidebar-empty-tip">未找到符合的人員</div>';
+    return;
+  }
+
+  sidebarList.innerHTML = '';
+  filtered.forEach(c => {
+    const isDrawn = theme.preventRepeat && Array.isArray(theme.drawnIds) && theme.drawnIds.includes(c.id);
+    
+    const item = document.createElement('div');
+    item.className = `candidate-chip-item ${isDrawn ? 'drawn' : 'active'}`;
+    
+    const nameGroup = document.createElement('div');
+    nameGroup.className = 'candidate-chip-name-group';
+    
+    const dot = document.createElement('span');
+    dot.className = `candidate-status-dot ${isDrawn ? 'dot-drawn' : 'dot-ready'}`;
+    
+    const nameText = document.createElement('span');
+    nameText.textContent = c.name + (c.weight && c.weight > 1 ? ` (權重 ${c.weight})` : '');
+    
+    nameGroup.appendChild(dot);
+    nameGroup.appendChild(nameText);
+    
+    const badge = document.createElement('span');
+    badge.className = `candidate-badge-status ${isDrawn ? 'drawn' : 'ready'}`;
+    badge.textContent = isDrawn ? '🔴 已抽出' : '🟢 待抽';
+    
+    item.appendChild(nameGroup);
+    item.appendChild(badge);
+    
+    sidebarList.appendChild(item);
+  });
 }
 
 /**
@@ -1106,6 +1185,9 @@ function executeDraw(preAcquiredStream) {
   // Save the new drawnIds back to state
   theme.drawnIds = drawResult.updatedDrawnIds;
   saveThemesToStorage();
+
+  // Immediately update candidate roster sidebar so recording captures updated status instantly
+  renderCandidatesSidebar();
 
   // Execute slots roll animation
   slotMachineInstance.roll(activeCandidates, drawResult.winners);
